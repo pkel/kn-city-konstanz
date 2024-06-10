@@ -1,0 +1,14 @@
+[project]
+name = "kn-city-logistik"
+version = "0.0.1"
+description = "WIP parking lot booking app for Constance"
+dependencies = [
+    "flask",
+]
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.flit.module]
+name = "app"
