@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>{% block title %}KN City Logistik{% endblock title %}</title>
+    {% endblock head %}
+  </head>
+  <body>
+    <header>
+      <h1>KN City Logistik</h1>
+    </header>
+    <main>
+      <hr>
+      {% block main %}{% endblock main %}
+    </main>
+    <footer>
+      <hr>
+      {% block footer %}
+      <p>
+      Work in Progress; interne Vorschau! &copy; Copyright 2024 by <a href="http://smart-green-city-konstanz.de/">Smart Green City Konstanz</a>.
+      </p>
+      {% endblock footer %}
+    </footer>
+  </body>
+</html>
+
