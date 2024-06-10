@@ -5,6 +5,7 @@ venv: pyproject.toml
 	python -m venv venv
 	pip install --upgrade pip
 	pip install -e .
+	touch venv
 
 clean:
 	rm -rf venv

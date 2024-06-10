@@ -3,6 +3,17 @@
 {% block title %}Login - {{ super() }}{% endblock title %}
 
 {% block main %}
-<h2>Login</h2>
-<p>Hier kommt das Login Formular hin!</p>
+
+{% include "flash.html" %}
+
+<form method="post">
+  <label for="username">Nutzername</label>
+  <input name="username" id="username" required>
+  <label for="password">Passwort</label>
+  <input type="password" name="password" id="password" required>
+  <input type="submit" value="Einloggen">
+  <p>Hier können Sie sich ausschließlich mit einem existierenden Account anmelden. Sie
+  haben noch keinen Account? <a href="{{ url_for('auth.register') }}">Dann
+    können Sie sich hier registrieren!</a></p>
+</form>
 {% endblock main %}

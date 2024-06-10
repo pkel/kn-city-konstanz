@@ -1,0 +1,11 @@
+{% block flash %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<article>
+  {% for message in messages %}
+  <aside><p>{{ message }}</p></aside>
+  {% endfor %}
+</article>
+{% endif %}
+{% endwith %}
+{% endblock flash %}

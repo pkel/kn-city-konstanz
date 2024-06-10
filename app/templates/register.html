@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Registrierung - {{ super() }}{% endblock title %}
+
+{% block main %}
+
+{% include "flash.html" %}
+
+<form method="post">
+  <label for="username">Nutzername</label>
+  <input name="username" id="username" required>
+  <label for="password">Passwort</label>
+  <input type="password" name="password" id="password" required>
+  <input type="submit" value="Registrieren">
+  <p>Hier können Sie einen neuen Account anlegen. Sie haben bereits einen
+  Account? <a href="{{ url_for('auth.login') }}">Dann melden Sie sich bitte
+    hier an!</a></p>
+</form>
+
+<hr>
+<p><b>Work in progress:</b> Momentan kann sich jeder registrieren. Für unsere
+Anwendung macht es aber vermutlich Sinn, eine zweistufige Anmeldung zu
+entwickeln. Also erst Antrag stellen. Das Amt checkt dann ob eine Berechtigung
+vorliegt. Dann wird der Account freigeschalten. Alternativ kann die
+Registrierung hier abgedreht werden und Account nur auf Antrag erstellt und
+synchronisiert. </p>
+
+{% endblock main %}
