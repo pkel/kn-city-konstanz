@@ -24,5 +24,5 @@ app/static/style.css:
 deploy:
 	git remote rm tmp-deploy || true
 	git remote add tmp-deploy dokku@dokku.sandbox.sgckn.pkel.dev:kn-city-logistik
-	git push tmp-deploy main
+	git push tmp-deploy main -f
 	git remote rm tmp-deploy
