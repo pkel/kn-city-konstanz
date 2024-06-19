@@ -3,7 +3,8 @@ name = "kn-city-logistik"
 version = "0.0.1"
 description = "WIP parking lot booking app for Constance"
 dependencies = [
-    "flask == 3.0.3",
+    "flask == 3",
+    "gunicorn == 22",
 ]
 
 [build-system]
