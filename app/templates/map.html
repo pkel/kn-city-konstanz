@@ -31,16 +31,14 @@
   var label
   {% for z in zones %}
   coords = [{{z.latitude}}, {{z.longitude}}];
-  url = "{{url_for ('booking.form', zone = z.id)}}";
+  url = "{{url_for ('booking.form', zone_id = z.id)}}";
   label = "<b>Ladezone &#8222;{{z.name}}&#8220;</b><br><br>"
   {% if g.user %}
   label += `<a href=${url}>Zur Reservierung</a>`
   {% else %}
   label += "Reservierung möglich (nach Registrierung)"
   {% endif %}
-  label
-  L.marker(coords).addTo(map)
-    .bindPopup(label)
+  L.marker(coords).addTo(map).bindPopup(label)
   {% endfor %}
 </script>
 {% endblock bottom_js %}
