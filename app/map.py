@@ -8,5 +8,5 @@ from app.auth import login_required
 blueprint = Blueprint('map', __name__, url_prefix=None)
 
 @blueprint.get('/map')
-def reserve():
+def map():
     return render_template('map.html')
