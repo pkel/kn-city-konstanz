@@ -10,3 +10,8 @@ blueprint = Blueprint('map', __name__, url_prefix=None)
 @blueprint.get('/map')
 def map():
     return render_template('map.html')
+
+@blueprint.get("/zone/<int:zone_id>")
+def booking(zone_id):
+
+    return render_template('booking.html', zone=zone_id)
