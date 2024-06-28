@@ -1,4 +1,4 @@
-dev: venv app/static/style.css
+dev: venv app/static/style.css instance/app.sqlite
 	venv/bin/flask run --debug # error messages & auto-reload on code change
 
 venv: requirements.txt
@@ -17,6 +17,10 @@ update: venv
 clean:
 	rm -rf venv
 	rm -f app/static/style.css
+	rm -f instance/app.sqlite
+
+instance/app.sqlite:
+	venv/bin/flask init-db
 
 app/static/style.css:
 	wget https://raw.githubusercontent.com/andybrewer/mvp/v1.15/mvp.css -O $@
