@@ -15,11 +15,11 @@ update: venv
 	touch venv
 
 clean:
-	rm -rf venv
+	rm -rf venv instance
 	rm -f app/static/style.css
-	rm -f instance/app.sqlite
 
 instance/app.sqlite:
+	mkdir -p instance
 	venv/bin/flask init-db
 
 app/static/style.css:
