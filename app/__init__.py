@@ -14,9 +14,10 @@ def create_app(test_config=None):
     db.init_app(app)
 
     # blueprint setup
-    from . import auth, booking
+    from . import auth, booking, map
     app.register_blueprint(auth.blueprint)
     app.register_blueprint(booking.blueprint)
+    app.register_blueprint(map.blueprint)
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
