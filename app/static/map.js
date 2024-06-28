@@ -25,5 +25,4 @@ var pointsOfInterest = [
 pointsOfInterest.forEach(function(point) {
     L.marker(point.coords).addTo(map)
         .bindPopup(`<b><a href="${point.url}" target="_blank">${point.name}</a></b>`)
-        .openPopup();
 });
