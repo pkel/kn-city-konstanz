@@ -22,6 +22,10 @@ add_zone(name="Mainaustraße 234", longitude=9.193330388228206, latitude=47.6928
 add_zone(name="Gartenstraße", longitude=9.1630646686759, latitude=47.66646372589333)
 add_zone(name="Rheingutstaße", longitude=9.166924063131988, latitude=47.667281151838125)
 
+def zone(id:int):
+    assert id == zones[id]['id']
+    return zones[id]
+
 blueprint = Blueprint('map', __name__, url_prefix=None)
 
 

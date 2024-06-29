@@ -5,12 +5,9 @@ from app.db import get_db
 from app.auth import login_required
 from datetime import datetime
 
-blueprint = Blueprint('booking', __name__, url_prefix=None)
+from . import map
 
-@blueprint.get('/reservieren/zone/<zone>')
-@login_required
-def form(zone):
-    return render_template('reserve.html')
+blueprint = Blueprint('booking', __name__, url_prefix=None)
 
 # Filter for parking slot
 def filterBooking(forName=None):
@@ -113,3 +110,9 @@ def book():
         return {
             "canBook": True
         }
+        
+@blueprint.get('/reservieren/zone/<int:zone_id>')
+@login_required
+def form(zone_id):
+    zone = map.zone(zone_id)
+    return render_template('reserve.html', zone=zone)
