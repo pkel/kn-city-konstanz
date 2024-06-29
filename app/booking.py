@@ -16,7 +16,7 @@ def filterBooking(forName=None):
         return (selectStatement,
                 ())
     else:
-        return (selectStatement + " WHERE parkingSpot = ?",
+        return (selectStatement + " WHERE zone = ?",
                 (forName,))
 
 # Query for a list of bookings for parking slots with filter applied
@@ -25,24 +25,23 @@ def searchBooking(filter):
     try:
         return db.execute(filter[0], filter[1]).fetchall()
     except db.IntegrityError:
-        flash(f"Unbekannter Parkplatz „{parkingspot}” erkannt!")
+        flash(f"Unbekannter Parkplatz „{zone}” erkannt!")
         return []
 
 
 @blueprint.get('/getBookings')
 @login_required
 def getBookings():
-    companyId = g.user.id
-    if "parkingSpot" in request.args.keys():
-        parkingSpot = request.args.get("parkingSpot")
+    companyId = g.user["id"]
+    if "zone" in request.args.keys():
+        zone = request.args.get("zone")
+        for zones in map.zone:
+            if zone != zone.keys()[0]:
+                return "zone invalid", 404
     else:
-        parkingSpot = None
+        zone = None
 
-    for zones in map.zone:
-        if parkingSpot != zone.keys()[0]:
-            return "parkingspot invalid", 404
-
-    bookings = searchBooking(filterBooking(forName=parkingSpot))
+    bookings = searchBooking(filterBooking(forName=zone))
     if bookings is None:
         flash(f"Keine Buchungen gefunden!")
         return []
@@ -55,8 +54,8 @@ def getBookings():
 
     return jsonify(bookingList)
 
-def alreadyBooked(parkingSpot, startDateTime, endDateTime):
-    bookings = searchBooking(filterBooking(forName=parkingSpot))
+def alreadyBooked(zone, startDateTime, endDateTime):
+    bookings = searchBooking(filterBooking(forName=zone))
     if bookings is None or len(bookings) == 0:
         return False
     for each in bookings:
@@ -81,13 +80,17 @@ def alreadyBooked(parkingSpot, startDateTime, endDateTime):
 @blueprint.post('/createBooking')
 @login_required
 def book():
-    companyId = g.user.id
+    companyId = g.user["id"]
     startDateTime = request.form['startDateTime']
     endDateTime = request.form['endDateTime']
-    parkingSpot = request.form["parkingSpot"]
+    zone = request.form["zone"]
 
-    if alreadyBooked(parkingSpot, startDateTime, endDateTime):
-        flash(f"Der Parkplat „{parkingSpot}” ist bereits vergeben!")
+    for zones in map.zone:
+        if zone != zone.keys()[0]:
+            return "zone invalid", 404
+
+    if alreadyBooked(zone, startDateTime, endDateTime):
+        flash(f"Der Parkplat „{zone}” ist bereits vergeben!")
         return {
             "canBook": False,
             "cause": "already booked"
@@ -95,8 +98,8 @@ def book():
     db = get_db()
     try:
         db.execute(
-                "INSERT INTO booking (companyId, startDateTime, endDateTime, parkingspot) VALUES (?,?,?,?)",
-                (companyId, startDateTime, endDateTime, parkingSpot),
+                "INSERT INTO booking (companyId, startDateTime, endDateTime, zone) VALUES (?,?,?,?)",
+                (companyId, startDateTime, endDateTime, zone),
                 )
         db.commit()
     except db.IntegrityError:
