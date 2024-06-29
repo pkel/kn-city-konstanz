@@ -40,8 +40,9 @@ fakeEvents = [
   ["2024-06-29T15:07:00", "2024-06-29T16:53:00", false],
 ]
 
-function createBookingEvent(start, end, isMine) {
-  const id = generateUUID();
+function createBookingEvent(id, start, end, isMine) {
+  //const id = generateUUID();
+  
   start = new Date(start);
   end = new Date(end);
   console.log("Creating event", id, start, end, isMine)
@@ -65,7 +66,7 @@ function populateCalendar() {
     .then(data => {
       data.forEach(event => {
 
-        createBookingEvent(event.startDateTime, event.endDateTime, event.isMine);
+        createBookingEvent(event.id, event.startDateTime, event.endDateTime, event.isMine);
       });
     });
 }
@@ -94,7 +95,6 @@ function clientsideValidate(eventObj) {
     otherEvent.start = new Date(otherEvent.start);
     otherEvent.end = new Date(otherEvent.end);
     if (eventObj.start < otherEvent.end && eventObj.end > otherEvent.start) {
-      console.log(eventObj, otherEvent);
       alert("Event must not overlap with other events");
       return false;
     }
@@ -105,6 +105,8 @@ function clientsideValidate(eventObj) {
 
 
 function postBooking(start, end) {
+  let bookingId = null;
+
   fetch("/reservieren/zone/"+ZONE_ID, {
     method: "POST",
     headers: {
@@ -119,9 +121,34 @@ function postBooking(start, end) {
     body.then(data => {
       if (!data.canBook) {
         alert("Booking failed: " + data.cause);
+      } else {
+        return data.bookingId;
       }
     });
   });
+
+
+}
+
+function updateBooking(bookingId, start, end) {
+  fetch("/reservieren/zone/"+ZONE_ID+"/"+bookingId, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      startDateTime: start,
+      endDateTime: end
+    }),
+  }).then(response => {
+    let body = response.json();
+    body.then(data => {
+      if (!data.canBook) {
+        alert("Booking failed to update: " + data.cause);
+      }
+    });
+  });
+
 }
 
 
@@ -137,9 +164,11 @@ calendar.on('beforeCreateEvent', (eventObj) => {
 
 
   // send to server
-  postBooking(eventObj.start, eventObj.end);
-
-  createBookingEvent(eventObj.start, eventObj.end, true);
+  let bookingId = postBooking(eventObj.start, eventObj.end);
+  if (bookingId === null) {
+    return;
+  }
+  createBookingEvent(bookingId, eventObj.start, eventObj.end, true);
 
   calendar.clearGridSelections();
 });
@@ -159,9 +188,7 @@ calendar.on("beforeUpdateEvent", (updatedEvent) => {
   }
 
   // send to server
-  postBooking(newEvent.start, newEvent.end);
-  console.log(oldEvent, "Updated to", newEvent);
-  console.log("Updated event", oldEvent.id, changes);
+  updateBooking(newEvent.id, changes.start, changes.end);
 
   calendar.updateEvent(oldEvent.id, "", changes);
 

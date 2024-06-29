@@ -41,6 +41,7 @@ def getBookings(zone_id):
         return []
 
     bookingList = [{
+        "id": str(each["id"]),
         "isMine": True if companyName == each["companyId"] else False,
         "startDateTime": each["startDateTime"],
         "endDateTime": each["endDateTime"]
@@ -118,17 +119,26 @@ def deleteUserBooking(booking_id):
             "canDelete": True
         }
 
-@blueprint.put('/reservieren/<int:booking_id>')
+@blueprint.put('/reservieren/zone/<int:zone_id>/<int:booking_id>')
 @login_required
-def updateUserBooking(booking_id):
-    companyId = g.user["id"]
-    startDateTime = request.form['startDateTime']
-    endDateTime = request.form['endDateTime']
+def updateUserBooking(zone_id, booking_id):
+    companyId = g.user["username"]
+    data = request.get_json()
+    
+    startDateTime = data['startDateTime']
+    endDateTime = data['endDateTime']
+    if type(startDateTime) == dict:
+        startDateTime = startDateTime["d"]["d"]
+    if type(endDateTime) == dict:
+        endDateTime = endDateTime["d"]["d"]
+    
+
+
     db = get_db()
     try:
         db.execute(
-                "UPDATE booking SET startDateTime=? endDateTime=? zone=? WHERE id = ?",
-                (startDateTime, endDateTime, zone, booking_id),
+                "UPDATE booking SET startDateTime=?, endDateTime=? WHERE id = ?",
+                (startDateTime, endDateTime, booking_id),
                 )
         db.commit()
     except db.IntegrityError:
@@ -161,11 +171,12 @@ def book(zone_id):
         }
     db = get_db()
     try:
-        db.execute(
-                "INSERT INTO booking (companyId, startDateTime, endDateTime, zoneId) VALUES (?,?,?,?)",
+        createdBookingId = db.execute(
+                "INSERT INTO booking (companyId, startDateTime, endDateTime, zoneId) VALUES (?,?,?,?) RETURNING id;",
                 (companyId, startDateTime, endDateTime, zone["id"]),
-                )
+                ).fetchone()
         db.commit()
+        print("!!!!!!!!!!", createdBookingId)
     except db.IntegrityError:
         flash(f"Buchung konnte nicht durchgeführt werden!")
         return {
@@ -175,6 +186,7 @@ def book(zone_id):
     else:
         flash(f"Buchung erfolgreich.")
         return {
+            "createdBookingId": createdBookingId[0],
             "canBook": True
         }
 
