@@ -7,7 +7,7 @@ from app.auth import login_required
 
 blueprint = Blueprint('booking', __name__, url_prefix=None)
 
-@blueprint.get('/reservieren')
+@blueprint.get('/reservieren/zone/<zone>')
 @login_required
-def reserve():
+def form(zone):
     return render_template('reserve.html')

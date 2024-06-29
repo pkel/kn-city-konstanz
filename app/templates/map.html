@@ -1,9 +1,8 @@
 {% extends "base.html" %}
 
 {% block head %}
-{{ super() }}
-<link rel="stylesheet" href="{{ url_for('static', filename='map.css') }}">
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+{{ super() }}
 {% endblock head %}
 
 {% block title %}Karte - {{ super() }}{% endblock title %}
@@ -12,8 +11,37 @@
 
 {% include "flash.html" %}
 <h2>Lieferzonen Karte</h2>
-<div id="map"></div>
+<div id="map" style="height:600px; width:100%; margin: 0 auto;"></div>
 
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="{{ url_for('static', filename='map.js') }}"></script>
 {% endblock main %}
+
+{% block bottom_js %}
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+  // Create a map and set its view to Konstanz with a certain zoom level
+  var map = L.map('map').setView([47.6636, 9.1758], 13);
+
+  // Add a tile layer to the map (OpenStreetMap tiles)
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  var coords
+  var url
+  var label
+  {% for z in zones %}
+  coords = [{{z.latitude}}, {{z.longitude}}];
+  url = "{{url_for ('booking.form', zone = z.id)}}";
+  label = "<b>Ladezone &#8222;{{z.name}}&#8220;</b><br><br>"
+  {% if g.user %}
+  label += `<a href=${url}>Zur Reservierung</a>`
+  {% else %}
+  label += "Reservierung möglich (nach Registrierung)"
+  {% endif %}
+  label
+  L.marker(coords).addTo(map)
+    .bindPopup(label)
+    .openPopup();
+  {% endfor %}
+</script>
+{% endblock bottom_js %}
