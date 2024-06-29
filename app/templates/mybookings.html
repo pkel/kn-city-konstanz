@@ -11,7 +11,14 @@
 function deleteBooking(booking_id) {
 fetch("/reservieren/"+ booking_id,{
     method: 'delete'
-});
+}).then(function(response) {
+    if(response.ok) {
+        location.reload();
+    }
+    else {
+        alert("Fehler beim Löschen der Buchung");
+    }
+})
 }
 </script>
 

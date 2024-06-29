@@ -75,22 +75,26 @@ def alreadyBooked(zone, startDateTime, endDateTime):
 @blueprint.get('/reservieren')
 @login_required
 def getUserBooking():
-    companyId = g.user["id"]
+    companyId = g.user["username"]
     db = get_db()
+
+    
     try:
         bookings = db.execute(
-                "SELECT id, companyId, startDateTime, endDateTime FROM booking WHERE companyId = ?",
+                "SELECT id, companyId, startDateTime, endDateTime, zoneId FROM booking WHERE companyId = ?",
                 (companyId,),
                 ).fetchall()
     except db.IntegrityError:
         flash(f"Buchung konnte geholt werden!")
         return "internal error", 404
     else:
+
         bookingList = ([{
-        "id": each["id"],
-        "startDateTime": each["startDateTime"],
-        "endDateTime": each["endDateTime"]
-            } for each in bookings])
+            "id": each["id"],
+            "startDateTime": datetime.fromisoformat(each["startDateTime"]).strftime("%d %b %H:%M"),
+            "endDateTime": datetime.fromisoformat(each["endDateTime"]).strftime("%d %b %H:%M"),
+            "zone": each["zoneId"]
+        } for each in bookings])
     if len(bookingList) == 0:
         flash(f"Keine Buchung vorhanden! Bitte Reservierung vornehmen.")
     return render_template('mybookings.html', bookingList=bookingList)
@@ -98,12 +102,12 @@ def getUserBooking():
 @blueprint.delete('/reservieren/<int:booking_id>')
 @login_required
 def deleteUserBooking(booking_id):
-    companyId = g.user["id"]
+    companyId = g.user["username"]
 
     db = get_db()
     try:
         db.execute(
-                "DELETE booking WHERE id = ? and companyId = ?",
+                "DELETE FROM booking WHERE id = ? and companyId = ?",
                 (booking_id, companyId),
                 )
         db.commit()
