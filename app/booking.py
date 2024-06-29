@@ -16,11 +16,12 @@ def filterBooking(forName=None):
         return (selectStatement,
                 ())
     else:
-        return (selectStatement + " WHERE zone = ?",
+        return (selectStatement + " WHERE zoneId = ?",
                 (forName,))
 
 # Query for a list of bookings for parking slots with filter applied
 def searchBooking(filter):
+    print(filter, "filter")
     db = get_db()
     try:
         return db.execute(filter[0], filter[1]).fetchall()
@@ -35,7 +36,7 @@ def getBookings(zone_id):
     companyId = g.user["id"]
     zone = map.zone(zone_id)
 
-    bookings = searchBooking(filterBooking(forName=zone))
+    bookings = searchBooking(filterBooking(zone["id"]))
     if bookings is None:
         flash(f"Keine Buchungen gefunden!")
         return []

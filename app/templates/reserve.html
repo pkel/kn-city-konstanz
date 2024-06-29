@@ -30,4 +30,9 @@
 <script src="{{ url_for('static', filename='tui-date-picker.js') }}"></script>
 <script src="{{ url_for('static', filename='toastui-calendar.min.js') }}"></script>
 <script src="{{ url_for('static', filename='calendarlogic.js') }}"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    populateCalendar({{zone['id']}});
+  });
+</script>
 {% endblock bottom_js  %}

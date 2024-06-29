@@ -34,13 +34,16 @@ const allEventsState = []; // calendar itself does not store events, so we need 
 
 // from, to, isMine
 fakeEvents = [
-  ["2024-06-29T09:00:00", "2024-06-29T10:00:00", false],
-  ["2024-06-29T12:00:00", "2024-06-29T14:00:00", true],
-  ["2024-06-29T15:00:00", "2024-06-29T16:00:00", false],
+  ["2024-06-29T09:00:00", "2024-06-29T10:23:00", false],
+  ["2024-06-29T12:00:00", "2024-06-29T14:43:00", true],
+  ["2024-06-29T15:07:00", "2024-06-29T16:53:00", false],
 ]
 
 function createBookingEvent(start, end, isMine) {
   const id = generateUUID();
+  start = new Date(start);
+  end = new Date(end);
+  console.log("Creating event", id, start, end, isMine)
   allEventsState.push({id: id, start: start, end: end, isMine: isMine});
 
   calendar.createEvents([{
@@ -58,13 +61,14 @@ fakeEvents.forEach(event => {
   calendar.clearGridSelections();
 });
 
-function populateCalendar() {
+function populateCalendar(zoneId) {
   // Get events from server // filler for now
-  fetch("/bookings")
+  fetch("/reservieren/zone/"+zoneId+"/bookings")
     .then(response => response.json())
     .then(data => {
       data.forEach(event => {
-        createBookingEvent(event.start, event.end, event.isMine);
+
+        createBookingEvent(event.startDateTime, event.endDateTime, event.isMine);
       });
     });
 }
