@@ -34,9 +34,10 @@ def searchBooking(filter):
 
 
 @blueprint.get('/getBookings')
-# @login_required
+@login_required
 def getBookings():
-        # companyId = session['username']
+    if "username" in session.keys():
+        companyId = session['username']
     if "companyId" in request.args.keys():
         companyId = request.args.get("companyId")
     if "parkingSpot" in request.args.keys():
@@ -81,18 +82,19 @@ def alreadyBooked(parkingSpot, startDateTime, endDateTime):
     return False
 
 @blueprint.post('/createBooking')
-# @login_required
+@login_required
 def book():
     companyId = request.form['companyId']
     startDateTime = request.form['startDateTime']
     endDateTime = request.form['endDateTime']
     parkingSpot = request.form["parkingSpot"]
 
-    print(companyId,startDateTime,endDateTime,parkingSpot)
-
     if alreadyBooked(parkingSpot, startDateTime, endDateTime):
         flash(f"Der Parkplat „{parkingSpot}” ist bereits vergeben!")
-        return {}
+        return {
+            "canBook": False,
+            "cause": "already booked"
+        }
     db = get_db()
     try:
         db.execute(
@@ -100,12 +102,14 @@ def book():
                 (companyId, startDateTime, endDateTime, parkingSpot),
                 )
         db.commit()
-        return {}
     except db.IntegrityError:
         flash(f"Buchung konnte nicht durchgeführt werden!")
-        return {}
+        return {
+            "canBook": False,
+            "cause": "internal error"
+        }
     else:
         flash(f"Buchung erfolgreich.")
-        return {}
-    
-    return {}
+        return {
+            "canBook": True
+        }
