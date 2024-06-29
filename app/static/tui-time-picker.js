@@ -2506,14 +2506,14 @@ var TimePicker = defineClass(
 
     meridiemableTime: function(disabledHours) {
       var diffHour = 0;
-      var startHour = 0;
+      var startHour = 8;
       var endHour = 11;
       var result = [];
 
       if (this.hour >= 12) {
         diffHour = 12;
         startHour = 12;
-        endHour = 23;
+        endHour = 20;
       }
 
       forEachArray(disabledHours, function(hour) {
