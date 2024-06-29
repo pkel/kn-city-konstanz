@@ -3,6 +3,20 @@
 {% block head %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 {{ super() }}
+
+<style>
+  #map {
+      height: 600px; /* Default height */
+      width: 100%;  /* Default width */
+  }
+
+  /* Media query for smaller screens */
+  @media (max-width: 600px) {
+      #map {
+          height: 400px; /* Adjust height as needed */
+      }
+  }
+</style>
 {% endblock head %}
 
 {% block title %}Karte - {{ super() }}{% endblock title %}
@@ -11,15 +25,26 @@
 
 {% include "flash.html" %}
 <h2>Lieferzonen Karte</h2>
-<div id="map" style="height:600px; width:100%; margin: 0 auto;"></div>
+<div id="map"></div>
 
 {% endblock main %}
 
 {% block bottom_js %}
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
-  // Create a map and set its view to Konstanz with a certain zoom level
-  var map = L.map('map').setView([47.6636, 9.1758], 13);
+  // Definiere die maximalen geografischen Grenzen
+  var southWest = L.latLng(47.64572837458656, 9.121830875142173);
+  var northEast = L.latLng(47.701997613815735, 9.225562804812528);
+  var bounds = L.latLngBounds(southWest, northEast);
+
+  var map = L.map('map', {
+      center: [47.671, 9.181],  // Zentralpunkt innerhalb der Bounds
+      zoom: 13,
+      minZoom: 10,
+      maxZoom: 18,
+      maxBounds: bounds,
+      maxBoundsViscosity: 1
+  });
 
   // Add a tile layer to the map (OpenStreetMap tiles)
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
