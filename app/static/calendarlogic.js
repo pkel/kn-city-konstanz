@@ -187,6 +187,9 @@ calendar.on("beforeUpdateEvent", (updatedEvent) => {
     return;
   }
 
+  if (changes.start === undefined || changes.start === null) {
+    changes.start = oldEvent.start;
+  }
   // send to server
   updateBooking(newEvent.id, changes.start, changes.end);
 
