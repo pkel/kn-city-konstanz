@@ -2,42 +2,57 @@
 <html lang="en">
   <head>
     {% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>{% block title %}Rendezvous Logistik Konstanz{% endblock title %}</title>
+    <title>
+      {% block title %}Rendezvous Logistik Konstanz{% endblock title %}
+    </title>
     {% endblock head %}
   </head>
   <body>
     <header>
       <nav>
         <ul>
-          <li><a href="{{ url_for('map.map') }}">Karte</a></li>
+          <li><a class="rmvLinkUnderln" href="{{ url_for('map.map') }}">Karte</a></li>
           {% if g.user %}
-          <li><span>Nutzer: {{ g.user['username'] }}</span></li>
-          <li><a href="{{ url_for('auth.logout') }}">Abmelden</a></li>
+          <li><span >Nutzer: {{ g.user['username'] }}</span></li>
+          <li>
+            <a class="rmvLinkUnderln" href="{{ url_for('auth.logout') }}">Abmelden</a>
+          </li>
           {% else %}
-          <li><a href="{{ url_for('auth.register') }}">Registrieren</a></li>
-          <li><a href="{{ url_for('auth.login') }}">Einloggen</a></li>
+          <li>
+            <a class="rmvLinkUnderln" href="{{ url_for('auth.register') }}"
+              >Registrieren</a
+            >
+          </li>
+          <li>
+            <a class="rmvLinkUnderln" href="{{ url_for('auth.login') }}">Einloggen</a>
+          </li>
           {% endif %}
         </ul>
       </nav>
-      <h1>Rendezvous Logistik Konstanz</h1>
+      <h1 style="margin-top: -100px; margin-bottom: -100px">
+        Rendezvous Logistik Konstanz
+      </h1>
     </header>
-    <main>
-      {% block main %}{% endblock main %}
-    </main>
-    <footer>
-      <hr>
+    <main>{% block main %}{% endblock main %}</main>
+    <footer style="margin-top: -100px">
+      <hr />
       {% block footer %}
       <p>
-      Work in progress; interne Vorschau! &copy; Copyright 2024 by <a href="http://smart-green-city-konstanz.de/">Smart Green City Konstanz</a>.
+        Work in progress; interne Vorschau! &copy; Copyright 2024 by
+        <a href="http://smart-green-city-konstanz.de/"
+          >Smart Green City Konstanz</a
+        >.
       </p>
       {% endblock footer %}
     </footer>
     {% block bottom_js %}{% endblock bottom_js %}
   </body>
 </html>
-
