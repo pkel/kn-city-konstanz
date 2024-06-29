@@ -12,7 +12,11 @@
   </head>
   <body>
     <header>
-      <nav>
+      <nav style="margin-bottom: -100px;">
+        <a><img style="border-radius: 40px;" alt="RendezvousLogistikKonstanz" src="{{ url_for('static', filename='logo.jpg') }}" height="70"></a>
+        <h1 style="font-size: 204; font-weight: 10px;">
+          Rendezvous Logistik Konstanz
+        </h1>
         <ul>
           <li><a href="{{ url_for('map.map') }}">Karte</a></li>
           {% if g.user %}
@@ -24,13 +28,10 @@
           {% endif %}
         </ul>
       </nav>
-      <h1>Rendezvous Logistik Konstanz</h1>
     </header>
-    <main>
-      {% block main %}{% endblock main %}
-    </main>
-    <footer>
-      <hr>
+    <main>{% block main %}{% endblock main %}</main>
+    <footer style="margin-top: -190px">
+      <hr />
       {% block footer %}
       <p>
       Work in progress; interne Vorschau! &copy; Copyright 2024 by <a href="http://smart-green-city-konstanz.de/">Smart Green City Konstanz</a>.
