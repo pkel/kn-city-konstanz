@@ -17,7 +17,6 @@
           {% if g.user %}
           <li><span>Nutzer: {{ g.user['username'] }}</span></li>
           <li><a href="{{ url_for('auth.logout') }}">Abmelden</a></li>
-          <li><a href="{{ url_for('booking.reserve') }}">Reservieren</a></li>
           {% else %}
           <li><a href="{{ url_for('auth.register') }}">Registrieren</a></li>
           <li><a href="{{ url_for('auth.login') }}">Einloggen</a></li>
@@ -38,6 +37,7 @@
       </p>
       {% endblock footer %}
     </footer>
+    {% block bottom_js %}{% endblock bottom_js %}
   </body>
 </html>
 

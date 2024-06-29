@@ -2,8 +2,9 @@
 
 {% block head %}
   {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='toastui-calendar.min.css') }}">
-    <script src="{{ url_for('static', filename='toastui-calendar.min.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='toastui-calendar.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='tui-time-picker.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='tui-date-picker.css') }}">
 {% endblock %}
 
 {% block title %}Reservieren - {{ super() }}{% endblock title %}
@@ -12,10 +13,21 @@
 
 {% include "flash.html" %}
 
-<div id="calendar" style="height: 600px;"></div>
+<h2>Buchungskalender für Ladezone &#8222;{{zone['name']}}&#8220;</h2>
+
+<div id="calendarContainer" style="height: 800px">
+  <button id="btnPrev">Früher</button>
+  <button id="btnToday">Heute</button>
+  <button id="btnNext">Später</button>
+  <div id="calendar" style="height: 100%"></div>
+</div>
+
+{% endblock main %}
+
+{% block bottom_js %}
 <script src="{{ url_for('static', filename='preact.min.js') }}"></script>
 <script src="{{ url_for('static', filename='tui-time-picker.js') }}"></script>
 <script src="{{ url_for('static', filename='tui-date-picker.js') }}"></script>
-<script src="{{ url_for('static', filename='calendar.js') }}"></script>
-
-{% endblock main %}
+<script src="{{ url_for('static', filename='toastui-calendar.min.js') }}"></script>
+<script src="{{ url_for('static', filename='calendarlogic.js') }}"></script>
+{% endblock bottom_js  %}
