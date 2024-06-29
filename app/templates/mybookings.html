@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Reservieren - {{ super() }}{% endblock title %}
+
+{% block main %}
+
+{% include "flash.html" %}
+
+<h2>Buchungskalender für Kunde</h2>
+<script>
+function deleteBooking(booking_id) {
+fetch("/reservieren/"+ booking_id,{
+    method: 'delete'
+});
+}
+</script>
+
+
+{% if bookingList %}
+<div>
+    <table>
+        <tr>
+            <th>Buchungsstart</th>
+            <th>Buchungsende</th>
+            <th>Zone</th>
+            <th>Aktion</th>
+        </tr>
+        {% for booking in bookingList %}
+        <tr>
+            <td>{{ booking["startDateTime"]}}</td>
+            <td>{{ booking["endDateTime"]}}</td>
+            <td>{{ booking["zone"]}} </td>
+            <td><a onclick="deleteBooking({{ booking['id'] }})">Delete</a></td>
+        </tr>
+        {% endfor %}
+
+    </table>
+</div>
+{% endif %}
+
+{% endblock main %}
