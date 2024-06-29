@@ -28,7 +28,6 @@ def zone(id:int):
 
 blueprint = Blueprint('map', __name__, url_prefix=None)
 
-
-@blueprint.get('/map')
+@blueprint.get("/")
 def map():
     return render_template('map.html', zones=zones)

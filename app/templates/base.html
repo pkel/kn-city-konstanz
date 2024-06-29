@@ -14,6 +14,7 @@
     <header>
       <nav>
         <ul>
+          <li><a href="{{ url_for('map.map') }}">Karte</a></li>
           {% if g.user %}
           <li><span>Nutzer: {{ g.user['username'] }}</span></li>
           <li><a href="{{ url_for('auth.logout') }}">Abmelden</a></li>
@@ -21,7 +22,6 @@
           <li><a href="{{ url_for('auth.register') }}">Registrieren</a></li>
           <li><a href="{{ url_for('auth.login') }}">Einloggen</a></li>
           {% endif %}
-          <li><a href="{{ url_for('map.map') }}">Karte</a></li>
         </ul>
       </nav>
       <h1>Rendezvous Logistik Konstanz</h1>
