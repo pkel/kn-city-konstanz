@@ -115,9 +115,12 @@ function postBooking(start, end) {
       endDateTime: end
     }),
   }).then(response => {
-    if (!response.canBook) {
-      alert("Booking failed because " + response.cause);
-    }
+    let body = response.json();
+    body.then(data => {
+      if (!data.canBook) {
+        alert("Booking failed: " + data.cause);
+      }
+    });
   });
 }
 
