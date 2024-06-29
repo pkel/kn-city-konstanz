@@ -16,6 +16,10 @@ function generateUUID() { // Public Domain/MIT
   });
 }
 
+document.on("DOMContentLoaded", function() {
+  calendar.next();
+});
+
 const calendar = new Calendar("#calendar", {
   defaultView: "week",
   week: {
