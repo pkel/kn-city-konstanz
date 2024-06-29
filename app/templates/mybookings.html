@@ -6,7 +6,7 @@
 
 {% include "flash.html" %}
 
-<h2>Buchungskalender für Kunde</h2>
+<h2>Meine Buchungen</h2>
 <script>
 function deleteBooking(booking_id) {
 fetch("/reservieren/"+ booking_id,{
@@ -37,7 +37,7 @@ fetch("/reservieren/"+ booking_id,{
             <td>{{ booking["startDateTime"]}}</td>
             <td>{{ booking["endDateTime"]}}</td>
             <td>{{ booking["zone"]}} </td>
-            <td><a onclick="deleteBooking({{ booking['id'] }})">Delete</a></td>
+            <td><button onclick="deleteBooking({{ booking['id'] }})">Löschen</button></td>
         </tr>
         {% endfor %}
 

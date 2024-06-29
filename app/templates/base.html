@@ -22,7 +22,7 @@
           {% if g.user %}
           <li><span>Nutzer: {{ g.user['username'] }}</span></li>
           <li><a href="{{ url_for('auth.logout') }}">Abmelden</a></li>
-          <li><a href="{{ url_for('booking.getUserBooking') }}">MyBookings</a></li>
+          <li><a href="{{ url_for('booking.getUserBooking') }}">Meine Buchungen</a></li>
           {% else %}
           <li><a href="{{ url_for('auth.register') }}">Registrieren</a></li>
           <li><a href="{{ url_for('auth.login') }}">Einloggen</a></li>
@@ -31,11 +31,11 @@
       </nav>
     </header>
     <main>{% block main %}{% endblock main %}</main>
-    <footer style="margin-top: -190px">
+    <footer style="padding-top=0">
       <hr />
       {% block footer %}
       <p>
-      Work in progress; interne Vorschau! &copy; Copyright 2024 by <a href="http://smart-green-city-konstanz.de/">Smart Green City Konstanz</a>.
+      Work in progress; interne Vorschau! &copy; Copyright 2024 by <a href="http://smart-green-city-konstanz.de/">Smart Green City Konstanz</a> and Hack and Harvest 2024 Team 3. Code available on <a href="https://github.com/pkel/sgc-rendezvous">Github</a>.
       </p>
       {% endblock footer %}
     </footer>
