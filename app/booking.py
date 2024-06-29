@@ -29,17 +29,11 @@ def searchBooking(filter):
         return []
 
 
-@blueprint.get('/getBookings')
+@blueprint.get('/reservieren/zone/<int:zone_id>/bookings')
 @login_required
-def getBookings():
+def getBookings(zone_id):
     companyId = g.user["id"]
-    if "zone" in request.args.keys():
-        zone = request.args.get("zone")
-        for zones in map.zone:
-            if zone != zone.keys()[0]:
-                return "zone invalid", 404
-    else:
-        zone = None
+    zone = map.zone(zone_id)
 
     bookings = searchBooking(filterBooking(forName=zone))
     if bookings is None:
@@ -77,17 +71,14 @@ def alreadyBooked(zone, startDateTime, endDateTime):
             return True
     return False
 
-@blueprint.post('/createBooking')
+@blueprint.post('/reservieren/zone/<int:zone_id>')
 @login_required
-def book():
+def book(zone_id):
     companyId = g.user["id"]
     startDateTime = request.form['startDateTime']
     endDateTime = request.form['endDateTime']
-    zone = request.form["zone"]
 
-    for zones in map.zone:
-        if zone != zone.keys()[0]:
-            return "zone invalid", 404
+    zone = map.zone(zone_id)
 
     if alreadyBooked(zone, startDateTime, endDateTime):
         flash(f"Der Parkplat „{zone}” ist bereits vergeben!")
@@ -113,7 +104,7 @@ def book():
         return {
             "canBook": True
         }
-        
+
 @blueprint.get('/reservieren/zone/<int:zone_id>')
 @login_required
 def form(zone_id):
