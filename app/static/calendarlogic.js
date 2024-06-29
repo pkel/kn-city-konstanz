@@ -16,9 +16,7 @@ function generateUUID() { // Public Domain/MIT
   });
 }
 
-document.on("DOMContentLoaded", function() {
-  calendar.next();
-});
+
 
 const calendar = new Calendar("#calendar", {
   defaultView: "week",
@@ -34,6 +32,9 @@ const calendar = new Calendar("#calendar", {
   useDetailPopup: true
 
 });
+
+calendar.next();
+
 
 const allEventsState = []; // calendar itself does not store events, so we need to keep track of them
 
