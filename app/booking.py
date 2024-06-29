@@ -35,20 +35,21 @@ def searchBooking(filter):
 @blueprint.get('/getBookings')
 @login_required
 def getBookings():
-    if "username" in session.keys():
-        companyId = session['username']
-    if "companyId" in request.args.keys():
-        companyId = request.args.get("companyId")
+    companyId = g.user.id
     if "parkingSpot" in request.args.keys():
         parkingSpot = request.args.get("parkingSpot")
     else:
         parkingSpot = None
 
+    for zones in map.zone:
+        if parkingSpot != zone.keys()[0]:
+            return "parkingspot invalid", 404
+
     bookings = searchBooking(filterBooking(forName=parkingSpot))
     if bookings is None:
         flash(f"Keine Buchungen gefunden!")
         return []
-    
+
     bookingList = [{
         "isMine": True if companyId == each["companyId"] else False,
         "startDateTime": each["startDateTime"],
@@ -83,7 +84,7 @@ def alreadyBooked(parkingSpot, startDateTime, endDateTime):
 @blueprint.post('/createBooking')
 @login_required
 def book():
-    companyId = request.form['companyId']
+    companyId = g.user.id
     startDateTime = request.form['startDateTime']
     endDateTime = request.form['endDateTime']
     parkingSpot = request.form["parkingSpot"]
