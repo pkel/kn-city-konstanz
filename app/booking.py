@@ -15,7 +15,7 @@ def form(zone):
 
 # Filter for parking slot
 def filterBooking(forName=None):
-    selectStatement = "SELECT id, username, startRange, endRange FROM booking"
+    selectStatement = "SELECT id, companyId, startDateTime, endDateTime FROM booking"
     if forName is None:
         return (selectStatement,
                 ())
@@ -36,6 +36,9 @@ def searchBooking(filter):
 @blueprint.get('/getBookings')
 # @login_required
 def getBookings():
+        # companyId = session['username']
+    if "companyId" in request.args.keys():
+        companyId = request.args.get("companyId")
     if "parkingSpot" in request.args.keys():
         parkingSpot = request.args.get("parkingSpot")
     else:
@@ -47,61 +50,62 @@ def getBookings():
         return []
     
     bookingList = [{
-        "username": each["username"],
-        "startRange": each["startRange"],
-        "endRange": each["endRange"]
+        "isMine": True if companyId == each["companyId"] else False,
+        "startDateTime": each["startDateTime"],
+        "endDateTime": each["endDateTime"]
     } for each in bookings]
 
     return jsonify(bookingList)
 
-def alreadyBooked(parkingSpot,startRange,endRange):
+def alreadyBooked(parkingSpot, startDateTime, endDateTime):
     bookings = searchBooking(filterBooking(forName=parkingSpot))
     if bookings is None or len(bookings) == 0:
         return False
     for each in bookings:
-        oldStart = datetime.fromisoformat(each["startRange"])
-        oldEnd = datetime.fromisoformat(each["endRange"])
-        newStart = datetime.fromisoformat(startRange)
-        newEnd = datetime.fromisoformat(endRange)
+        oldStart = datetime.fromisoformat(each["startDateTime"])
+        oldEnd = datetime.fromisoformat(each["endDateTime"])
+        newStart = datetime.fromisoformat(startDateTime)
+        newEnd = datetime.fromisoformat(endDateTime)
         # End between old start and end
         if  newEnd <= oldEnd and newEnd >= oldEnd:
             return True
         # Start between old start and end
         if newStart >= oldStart and newStart <= oldEnd:
             return True
+        # New Range contains old Range
         if newStart <= oldStart and newEnd >= oldStart:
             return True
+        # New Range starts in old Range
         if newStart >= oldStart and newStart <= oldEnd:
             return True
     return False
 
-@blueprint.post('/book')
+@blueprint.post('/createBooking')
 # @login_required
 def book():
-    username = session['username']
-    if "parkingSpot" in request.args.keys():
-        parkingSpot = request.args.get("parkingSpot")
-    if "startRange" in request.args.keys():
-        startRange = request.args.get("startRange")
-    if "endRange" in request.args.keys():
-        endRange = request.args.get("endRange")
+    companyId = request.form['companyId']
+    startDateTime = request.form['startDateTime']
+    endDateTime = request.form['endDateTime']
+    parkingSpot = request.form["parkingSpot"]
 
-    if alreadyBooked(parkingSpot,startRange,endRange):
+    print(companyId,startDateTime,endDateTime,parkingSpot)
+
+    if alreadyBooked(parkingSpot, startDateTime, endDateTime):
         flash(f"Der Parkplat „{parkingSpot}” ist bereits vergeben!")
-        return False
+        return {}
     db = get_db()
     try:
-        bookings = db.execute(
-                "INSERT INTO booking (username, startRange, endRange, parkingspot) VALUES (?,?,?,?)",
-                (username, startRange, endRange, parkingSpot),
+        db.execute(
+                "INSERT INTO booking (companyId, startDateTime, endDateTime, parkingspot) VALUES (?,?,?,?)",
+                (companyId, startDateTime, endDateTime, parkingSpot),
                 )
-        bookings.commit()
-        return True
+        db.commit()
+        return {}
     except db.IntegrityError:
         flash(f"Buchung konnte nicht durchgeführt werden!")
-        return False
+        return {}
     else:
         flash(f"Buchung erfolgreich.")
-        return True
+        return {}
     
-    return True
+    return {}
