@@ -3,6 +3,20 @@
 {% block head %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 {{ super() }}
+
+<style>
+  #map {
+      height: 600px; /* Default height */
+      width: 100%;  /* Default width */
+  }
+
+  /* Media query for smaller screens */
+  @media (max-width: 600px) {
+      #map {
+          height: 400px; /* Adjust height as needed */
+      }
+  }
+</style>
 {% endblock head %}
 
 {% block title %}Karte - {{ super() }}{% endblock title %}
@@ -11,7 +25,7 @@
 
 {% include "flash.html" %}
 <h2>Lieferzonen Karte</h2>
-<div id="map" style="height:600px; width:100%; margin: 0 auto;"></div>
+<div id="map"></div>
 
 {% endblock main %}
 
