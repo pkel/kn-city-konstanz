@@ -27,7 +27,7 @@
 {% block main %}
 
 {% include "flash.html" %}
-<h2>Lieferzonen Karte</h2>
+<h2>Karte: Umschlagplätze</h2>
 <div id="map"></div>
 
 {% endblock main %}
@@ -61,7 +61,7 @@
   {% for z in zones %}
   coords = [{{z.latitude}}, {{z.longitude}}];
   url = "{{url_for ('booking.form', zone_id = z.id)}}";
-  label = "<b>Ladezone &#8222;{{z.name}}&#8220;</b><br><br>"
+  label = "<b>Umschlagplatz &#8222;{{z.name}}&#8220;</b><br><br>"
   {% if g.user %}
   label += `<a class="rmvLinkUnderln" href=${url}>Zur Reservierung</a>`
   {% else %}

@@ -14,9 +14,9 @@ CREATE TABLE booking (
   companyId TEXT NOT NULL,
   startDateTime TEXT NOT NULL,
   endDateTime TEXT NOT NULL,
-  zone TEXT NOT NULL
+  zoneId INTEGER NOT NULL
 );
 
-INSERT INTO booking (id,companyId, startDateTime, endDateTime, zone) VALUES
-(1, "dhl", "2024-07-08T11:43+02:00", "2024-07-09T14:20+02:00","24"),
-(2, "dpd", "2024-07-14T08:43+02:00", "2024-07-14T11:43+02:00","16");
+INSERT INTO booking (id,companyId, startDateTime, endDateTime, zoneId) VALUES
+(1, "dhl", "2024-07-01T11:45+02:00", "2024-07-01T14:20+02:00",0),
+(2, "dpd", "2024-07-01T08:43+02:00", "2024-07-01T11:43+02:00",0);
