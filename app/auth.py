@@ -88,7 +88,7 @@ def login_post():
 
     session.clear() # nested login
     session['user_id'] = user['id']
-    return redirect(url_for('index'))
+    return redirect(url_for('map.map'))
 
 @blueprint.get('/einloggen')
 def login():
