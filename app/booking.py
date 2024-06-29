@@ -33,7 +33,7 @@ def searchBooking(filter):
 @blueprint.get('/reservieren/zone/<int:zone_id>/bookings')
 @login_required
 def getBookings(zone_id):
-    companyId = g.user["id"]
+    companyName = g.user["username"]
     zone = map.zone(zone_id)
 
     bookings = searchBooking(filterBooking(zone["id"]))
@@ -42,7 +42,7 @@ def getBookings(zone_id):
         return []
 
     bookingList = [{
-        "isMine": True if companyId == each["companyId"] else False,
+        "isMine": True if companyName == each["companyId"] else False,
         "startDateTime": each["startDateTime"],
         "endDateTime": each["endDateTime"]
     } for each in bookings]
@@ -75,14 +75,15 @@ def alreadyBooked(zone, startDateTime, endDateTime):
 @blueprint.post('/reservieren/zone/<int:zone_id>')
 @login_required
 def book(zone_id):
-    companyId = g.user["id"]
-    startDateTime = request.form['startDateTime']
-    endDateTime = request.form['endDateTime']
+    companyId = g.user["username"]
+    data = request.get_json()
+    startDateTime = data['startDateTime']
+    endDateTime = data['endDateTime']
 
     zone = map.zone(zone_id)
 
-    if alreadyBooked(zone, startDateTime, endDateTime):
-        flash(f"Der Parkplat „{zone}” ist bereits vergeben!")
+    if alreadyBooked(zone["id"], startDateTime, endDateTime):
+        flash(f"Der Parkplat „{zone['name']}” ist bereits vergeben!")
         return {
             "canBook": False,
             "cause": "already booked"
@@ -90,8 +91,8 @@ def book(zone_id):
     db = get_db()
     try:
         db.execute(
-                "INSERT INTO booking (companyId, startDateTime, endDateTime, zone) VALUES (?,?,?,?)",
-                (companyId, startDateTime, endDateTime, zone),
+                "INSERT INTO booking (companyId, startDateTime, endDateTime, zoneId) VALUES (?,?,?,?)",
+                (companyId, startDateTime, endDateTime, zone["id"]),
                 )
         db.commit()
     except db.IntegrityError:

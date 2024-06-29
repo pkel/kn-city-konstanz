@@ -1,4 +1,5 @@
 const Calendar = tui.Calendar;
+
 function generateUUID() { // Public Domain/MIT
   var d = new Date().getTime();//Timestamp
   var d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now()*1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
@@ -56,14 +57,10 @@ function createBookingEvent(start, end, isMine) {
   }]);
 }
 
-fakeEvents.forEach(event => {
-  createBookingEvent(event[0], event[1], event[2]);
-  calendar.clearGridSelections();
-});
 
-function populateCalendar(zoneId) {
+function populateCalendar() {
   // Get events from server // filler for now
-  fetch("/reservieren/zone/"+zoneId+"/bookings")
+  fetch("/reservieren/zone/"+ZONE_ID+"/bookings")
     .then(response => response.json())
     .then(data => {
       data.forEach(event => {
@@ -108,15 +105,19 @@ function clientsideValidate(eventObj) {
 
 
 function postBooking(start, end) {
-  fetch("/bookings", {
+  fetch("/reservieren/zone/"+ZONE_ID, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      start: start,
-      end: end
+      startDateTime: start,
+      endDateTime: end
     }),
+  }).then(response => {
+    if (!response.canBook) {
+      alert("Booking failed because " + response.cause);
+    }
   });
 }
 
