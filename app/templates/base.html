@@ -17,7 +17,11 @@
   </head>
   <body>
     <header>
-      <nav>
+      <nav style="margin-bottom: -100px;">
+        <a><img style="border-radius: 40px;" alt="RendezvousLogistikKonstanz" src="./static/RendezvousLogistikKonstanz.jpg" height="70"></a>
+        <h1 style="font-size: 204; font-weight: 10px;">
+          Rendezvous Logistik Konstanz
+        </h1>
         <ul>
           <li><a class="rmvLinkUnderln" href="{{ url_for('map.map') }}">Karte</a></li>
           {% if g.user %}
@@ -37,12 +41,9 @@
           {% endif %}
         </ul>
       </nav>
-      <h1 style="margin-top: -100px; margin-bottom: -100px">
-        Rendezvous Logistik Konstanz
-      </h1>
     </header>
     <main>{% block main %}{% endblock main %}</main>
-    <footer style="margin-top: -100px">
+    <footer style="margin-top: -190px">
       <hr />
       {% block footer %}
       <p>
