@@ -13,9 +13,12 @@
 {% include "flash.html" %}
 
 <div id="calendar" style="height: 600px;"></div>
+
+{% endblock main %}
+
+{% block bottom_js %}
 <script src="{{ url_for('static', filename='preact.min.js') }}"></script>
 <script src="{{ url_for('static', filename='tui-time-picker.js') }}"></script>
 <script src="{{ url_for('static', filename='tui-date-picker.js') }}"></script>
 <script src="{{ url_for('static', filename='calendar.js') }}"></script>
-
-{% endblock main %}
+{% endblock bottom_js  %}

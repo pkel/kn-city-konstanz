@@ -1,4 +1,4 @@
-dev: venv statics instance/app.sqlite
+dev: venv app/static instance/app.sqlite
 	venv/bin/flask run --debug # error messages & auto-reload on code change
 
 venv: requirements.txt
@@ -23,8 +23,12 @@ clean:
 	rm -f app/static/tui*.js
 	rm -f app/static/preact*.js
 
-statics: app/static/style.css app/static/tui-time-picker.js app/static/tui-date-picker.js app/static/preact.min.js app/static/toastui-calendar.min.js app/static/toastui-calendar.min.css
-
+app/static: app/static/style.css
+app/static: app/static/tui-time-picker.js
+app/static: app/static/tui-date-picker.js
+app/static: app/static/preact.min.js
+app/static: app/static/toastui-calendar.min.js
+app/static: app/static/toastui-calendar.min.css
 
 instance/app.sqlite:
 	mkdir -p instance
