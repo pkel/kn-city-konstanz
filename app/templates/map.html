@@ -13,7 +13,10 @@
   /* Media query for smaller screens */
   @media (max-width: 600px) {
       #map {
-          height: 400px; /* Adjust height as needed */
+        width: 108%;
+          height: 500px; /* Adjust height as needed */
+          margin-left: -15px;
+          margin-right: -15px;
       }
   }
 </style>
@@ -45,6 +48,7 @@
       maxBounds: bounds,
       maxBoundsViscosity: 1
   });
+  map.fitBounds(bounds); //makes Spots on map always shown on map on init
 
   // Add a tile layer to the map (OpenStreetMap tiles)
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
