@@ -1,3 +1,4 @@
+
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
@@ -5,3 +6,17 @@ CREATE TABLE users (
   username TEXT UNIQUE NOT NULL,
   password TEXT NOT NULL
 );
+
+DROP TABLE IF EXISTS booking;
+
+CREATE TABLE booking (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  companyId TEXT NOT NULL,
+  startDateTime TEXT NOT NULL,
+  endDateTime TEXT NOT NULL,
+  zone TEXT NOT NULL
+);
+
+INSERT INTO booking (id,companyId, startDateTime, endDateTime, zone) VALUES
+(1, "dhl", "2024-07-08T11:43+02:00", "2024-07-09T14:20+02:00","24"),
+(2, "dpd", "2024-07-14T08:43+02:00", "2024-07-14T11:43+02:00","16");
