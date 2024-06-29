@@ -1,5 +1,5 @@
 [project]
-name = "kn-city-logistik"
+name = "sgc-rendezvous"
 version = "0.0.1"
 description = "WIP parking lot booking app for Constance"
 dependencies = [
