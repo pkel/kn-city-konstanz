@@ -17,7 +17,6 @@ function generateUUID() { // Public Domain/MIT
 }
 
 
-
 const calendar = new Calendar("#calendar", {
   defaultView: "week",
   week: {
